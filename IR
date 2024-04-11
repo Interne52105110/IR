@@ -1,0 +1,27 @@
+tranches = [
+    (0, 10777, 0),
+    (10778, 27478, 0.11),
+    (27479, 79533, 0.30),
+    (79534, 168925, 0.41),
+    (168926, float('inf'), 0.45),
+]
+def calculer_impot(revenu, parts):
+    impot_total = 0
+    revenu_restant = revenu
+    
+    for bas, haut, taux in tranches:
+        if revenu_restant > bas:
+            montant_tranche = min(revenu_restant, haut) - bas
+            impot_tranche = montant_tranche * taux
+            impot_total += impot_tranche
+            revenu_restant -= montant_tranche
+    
+    impot_total /= parts
+    return max(0, impot_total)
+
+def demander_utilisateur():
+    revenu = float(input("Entrez votre revenu imposable: "))
+    parts = float(input("Entrez le nombre de parts de quotient familial: "))
+    impot = calculer_impot(revenu, parts)
+    print(f"L'impôt estimé est de {impot:.2f} euros.")
+
